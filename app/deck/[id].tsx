@@ -13,10 +13,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import LevelCard from '../../components/LevelCard';
 import { DECKS, Level } from '../../constants/decks';
 import { Colors, Fonts, Radius, Spacing } from '../../constants/theme';
+import { usePurchase } from '../../hooks/usePurchase';
 
 export default function DeckScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const deck = DECKS.find((d) => d.id === id);
+  const { isLevelLocked } = usePurchase();
 
   if (!deck) {
     return (
@@ -28,6 +30,10 @@ export default function DeckScreen() {
 
   function handleLevelPress(level: Level) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (isLevelLocked(level)) {
+      router.push('/paywall');
+      return;
+    }
     router.push(`/card/${id}/${level}`);
   }
 
@@ -72,6 +78,7 @@ export default function DeckScreen() {
                 cardColor={deck.cardColor}
                 onPress={() => handleLevelPress(lvl.level)}
                 index={index}
+                locked={isLevelLocked(lvl.level)}
               />
             ))}
           </View>

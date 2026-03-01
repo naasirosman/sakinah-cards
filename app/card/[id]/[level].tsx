@@ -2,7 +2,7 @@ import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Share,
@@ -17,6 +17,7 @@ import QuestionCard from '../../../components/QuestionCard';
 import { getDeck, Level } from '../../../constants/decks';
 import { Colors, Fonts, Radius, Spacing } from '../../../constants/theme';
 import { useFavourites } from '../../../hooks/useFavourites';
+import { usePurchase } from '../../../hooks/usePurchase';
 
 const LEVEL_LABELS: Record<Level, string> = {
   close: 'Close',
@@ -31,6 +32,14 @@ export default function CardScreen() {
   const deckRaw = getDeck(id);
   const deckLevelRaw = deckRaw?.levels.find((l) => l.level === level);
   const { addFavourite, removeFavourite, isFavourite } = useFavourites();
+  const { isLevelLocked, isLoading } = usePurchase();
+
+  // Guard: redirect to paywall if level is locked (handles direct deep-links)
+  useEffect(() => {
+    if (!isLoading && isLevelLocked(level)) {
+      router.replace('/paywall');
+    }
+  }, [isLoading, level]);
 
   if (!deckRaw || !deckLevelRaw) {
     return (

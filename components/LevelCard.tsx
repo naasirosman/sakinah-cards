@@ -11,6 +11,7 @@ interface Props {
   cardColor: string;
   onPress: () => void;
   index: number;
+  locked?: boolean;
 }
 
 const LEVEL_ICONS: Record<Level, string> = {
@@ -27,27 +28,48 @@ export default function LevelCard({
   cardColor,
   onPress,
   index,
+  locked = false,
 }: Props) {
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: cardColor, borderColor: accentColor + '40' }]}
+      style={[
+        styles.card,
+        { backgroundColor: cardColor, borderColor: accentColor + '40' },
+        locked && styles.cardLocked,
+      ]}
       onPress={onPress}
       activeOpacity={0.8}
     >
       <View style={styles.row}>
         <View style={[styles.iconContainer, { backgroundColor: accentColor + '25' }]}>
-          <Text style={[styles.icon, { color: accentColor }]}>{LEVEL_ICONS[level]}</Text>
+          {locked ? (
+            <Text style={styles.lockIcon}>🔒</Text>
+          ) : (
+            <Text style={[styles.icon, { color: accentColor }]}>{LEVEL_ICONS[level]}</Text>
+          )}
         </View>
         <View style={styles.textContainer}>
           <Text style={styles.label}>{label}</Text>
           <Text style={[styles.description, { color: Colors.textMuted }]}>{description}</Text>
         </View>
-        <View style={[styles.arrow, { backgroundColor: accentColor + '30' }]}>
-          <Text style={[styles.arrowText, { color: accentColor }]}>›</Text>
-        </View>
+        {locked ? (
+          <View style={styles.unlockBadge}>
+            <Text style={styles.unlockBadgeText}>Unlock</Text>
+          </View>
+        ) : (
+          <View style={[styles.arrow, { backgroundColor: accentColor + '30' }]}>
+            <Text style={[styles.arrowText, { color: accentColor }]}>›</Text>
+          </View>
+        )}
       </View>
       <View style={[styles.questionCount, { backgroundColor: accentColor + '15' }]}>
-        <Text style={[styles.questionCountText, { color: accentColor }]}>10 questions</Text>
+        {locked ? (
+          <Text style={[styles.questionCountText, { color: Colors.textMuted }]}>
+            Pro — unlock to access
+          </Text>
+        ) : (
+          <Text style={[styles.questionCountText, { color: accentColor }]}>10 questions</Text>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -111,6 +133,26 @@ const styles = StyleSheet.create({
   questionCountText: {
     fontFamily: Fonts.medium,
     fontSize: 11,
+    letterSpacing: 0.5,
+  },
+  cardLocked: {
+    opacity: 0.75,
+  },
+  lockIcon: {
+    fontSize: 18,
+  },
+  unlockBadge: {
+    backgroundColor: Colors.gold + '25',
+    borderWidth: 1,
+    borderColor: Colors.gold + '60',
+    borderRadius: Radius.full,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 3,
+  },
+  unlockBadgeText: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 11,
+    color: Colors.gold,
     letterSpacing: 0.5,
   },
 });
