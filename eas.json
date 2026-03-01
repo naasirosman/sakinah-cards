@@ -15,11 +15,15 @@
       },
       "ios": {
         "simulator": false,
-        "distribution": "internal"
+        "distribution": "internal",
+        "image": "macos-sequoia-15.3-xcode-16.3"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "ios": {
+        "image": "macos-sequoia-15.3-xcode-16.3"
+      }
     }
   },
   "submit": {
