@@ -8,7 +8,7 @@
       "developmentClient": true,
       "distribution": "internal",
       "ios": {
-        "image": "macos-15-xcode-16"
+        "image": "sdk-55"
       }
     },
     "preview": {
@@ -19,13 +19,13 @@
       "ios": {
         "simulator": false,
         "distribution": "internal",
-        "image": "macos-15-xcode-16"
+        "image": "sdk-55"
       }
     },
     "production": {
       "autoIncrement": true,
       "ios": {
-        "image": "macos-15-xcode-16"
+        "image": "sdk-55"
       }
     }
   },
