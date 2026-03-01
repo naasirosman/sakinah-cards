@@ -6,7 +6,10 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "ios": {
+        "image": "macos-15-xcode-16"
+      }
     },
     "preview": {
       "distribution": "internal",
@@ -15,11 +18,15 @@
       },
       "ios": {
         "simulator": false,
-        "distribution": "internal"
+        "distribution": "internal",
+        "image": "macos-15-xcode-16"
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "ios": {
+        "image": "macos-15-xcode-16"
+      }
     }
   },
   "submit": {
