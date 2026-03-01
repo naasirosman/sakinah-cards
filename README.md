@@ -47,10 +47,10 @@ Installs a custom Expo dev client on device — required for native modules.
 
 ```bash
 # iOS
-eas build --platform ios --profile development
+eas build --platform ios --profile production
 
 # Android
-eas build --platform android --profile development
+eas build --platform android --profile production
 ```
 
 Install the resulting `.ipa` / `.apk` on your device, then run:
