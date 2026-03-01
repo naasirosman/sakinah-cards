@@ -41,7 +41,7 @@ export default function PaywallScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top', 'bottom']}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -50,16 +50,14 @@ export default function PaywallScreen() {
         {/* Back */}
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Text style={styles.backArrow}>←</Text>
-          <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
 
         {/* Hero */}
         <View style={styles.hero}>
-          <Text style={styles.crescent}>☾</Text>
-          <Text style={styles.headline}>Unlock Sakina Cards</Text>
+          <Text style={styles.brand}>SAKINA</Text>
+          <Text style={styles.headline}>Unlock All Cards</Text>
           <Text style={styles.price}>£19.99</Text>
-          <View style={styles.priceUnderline} />
-          <Text style={styles.lifetimeTag}>Lifetime access</Text>
+          <Text style={styles.lifetimeTag}>Lifetime access · No renewals</Text>
         </View>
 
         {/* Benefits */}
@@ -70,25 +68,21 @@ export default function PaywallScreen() {
             'Every card we ever add, forever',
           ].map((benefit, i) => (
             <View key={i} style={[styles.benefitRow, i > 0 && styles.benefitBorder]}>
-              <Text style={styles.benefitIcon}>✦</Text>
+              <View style={[styles.check, { backgroundColor: Colors.gold + '20' }]}>
+                <Text style={[styles.checkText, { color: Colors.gold }]}>✓</Text>
+              </View>
               <Text style={styles.benefitText}>{benefit}</Text>
             </View>
           ))}
         </View>
 
-        {/* Ayah quote */}
-        <View style={styles.ayahCard}>
-          <Text style={styles.ayahSymbol}>☾</Text>
-          <Text style={styles.ayahText}>
+        {/* Quote */}
+        <View style={styles.quoteCard}>
+          <Text style={styles.quoteText}>
             "And He placed between you affection and mercy."
           </Text>
-          <Text style={styles.ayahSource}>— Ar-Rum 30:21</Text>
+          <Text style={styles.quoteSource}>Ar-Rum 30:21</Text>
         </View>
-
-        {/* Tagline */}
-        <Text style={styles.tagline}>
-          No monthly fees. No renewals.{'\n'}One intention, one payment, forever.
-        </Text>
 
         {/* CTA */}
         <TouchableOpacity
@@ -98,24 +92,19 @@ export default function PaywallScreen() {
           activeOpacity={0.85}
         >
           {purchasing ? (
-            <ActivityIndicator color={Colors.background} />
+            <ActivityIndicator color={Colors.white} />
           ) : (
             <Text style={styles.ctaText}>Unlock for £19.99</Text>
           )}
         </TouchableOpacity>
 
         {/* Restore */}
-        <TouchableOpacity
-          style={styles.restoreBtn}
-          onPress={handleRestore}
-          disabled={restoring}
-        >
+        <TouchableOpacity style={styles.restoreBtn} onPress={handleRestore} disabled={restoring}>
           <Text style={styles.restoreText}>
             {restoring ? 'Restoring...' : 'Restore Purchase'}
           </Text>
         </TouchableOpacity>
 
-        {/* Free note */}
         <Text style={styles.freeNote}>
           The "Close" level of every deck is always free.
         </Text>
@@ -137,19 +126,11 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xxl,
   },
   backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
     paddingVertical: Spacing.md,
+    alignSelf: 'flex-start',
   },
   backArrow: {
-    fontSize: 20,
-    color: Colors.text,
-    fontFamily: Fonts.regular,
-  },
-  backText: {
-    fontFamily: Fonts.medium,
-    fontSize: 16,
+    fontSize: 22,
     color: Colors.text,
   },
   hero: {
@@ -157,45 +138,40 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.xl,
     gap: Spacing.sm,
   },
-  crescent: {
-    fontSize: 48,
+  brand: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 11,
     color: Colors.gold,
-    marginBottom: Spacing.xs,
+    letterSpacing: 6,
   },
   headline: {
-    fontFamily: Fonts.bold,
-    fontSize: 36,
+    fontFamily: Fonts.boldItalic,
+    fontSize: 40,
     color: Colors.text,
     textAlign: 'center',
-    letterSpacing: 0.5,
+    letterSpacing: -0.3,
+    lineHeight: 44,
   },
   price: {
     fontFamily: Fonts.bold,
-    fontSize: 52,
-    color: Colors.gold,
-    letterSpacing: 1,
+    fontSize: 48,
+    color: Colors.text,
+    letterSpacing: -1,
     marginTop: Spacing.xs,
   },
-  priceUnderline: {
-    width: 60,
-    height: 2,
-    backgroundColor: Colors.gold,
-    borderRadius: 1,
-    opacity: 0.6,
-  },
   lifetimeTag: {
-    fontFamily: Fonts.mediumItalic,
-    fontSize: 16,
-    color: Colors.textLight,
-    letterSpacing: 1,
+    fontFamily: Fonts.italic,
+    fontSize: 14,
+    color: Colors.textMuted,
+    letterSpacing: 0.3,
   },
   benefitsCard: {
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.white,
     borderRadius: Radius.md,
     borderWidth: 1,
     borderColor: Colors.border,
-    paddingVertical: Spacing.sm,
-    marginBottom: Spacing.lg,
+    paddingVertical: Spacing.xs,
+    marginBottom: Spacing.md,
   },
   benefitRow: {
     flexDirection: 'row',
@@ -208,77 +184,63 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: Colors.border,
   },
-  benefitIcon: {
-    fontSize: 12,
-    color: Colors.gold,
-    width: 16,
-    textAlign: 'center',
+  check: {
+    width: 28,
+    height: 28,
+    borderRadius: Radius.full,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkText: {
+    fontSize: 13,
+    fontFamily: Fonts.bold,
   },
   benefitText: {
     fontFamily: Fonts.regular,
     fontSize: 16,
     color: Colors.text,
     flex: 1,
-    lineHeight: 24,
+    lineHeight: 22,
   },
-  ayahCard: {
-    backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    padding: Spacing.xl,
+  quoteCard: {
     alignItems: 'center',
-    gap: Spacing.sm,
+    paddingVertical: Spacing.xl,
+    gap: Spacing.xs,
     marginBottom: Spacing.lg,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.border,
   },
-  ayahSymbol: {
-    fontSize: 20,
-    color: Colors.red,
-  },
-  ayahText: {
+  quoteText: {
     fontFamily: Fonts.semiBoldItalic,
-    fontSize: 18,
-    color: Colors.text,
-    textAlign: 'center',
-    lineHeight: 28,
-    letterSpacing: 0.3,
-  },
-  ayahSource: {
-    fontFamily: Fonts.italic,
-    fontSize: 13,
+    fontSize: 17,
     color: Colors.textMuted,
-    letterSpacing: 0.5,
-  },
-  tagline: {
-    fontFamily: Fonts.mediumItalic,
-    fontSize: 16,
-    color: Colors.textLight,
     textAlign: 'center',
     lineHeight: 26,
-    marginBottom: Spacing.xl,
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
+  },
+  quoteSource: {
+    fontFamily: Fonts.regular,
+    fontSize: 12,
+    color: Colors.textLight,
+    letterSpacing: 0.5,
   },
   ctaBtn: {
-    backgroundColor: Colors.gold,
+    backgroundColor: Colors.text,
     borderRadius: Radius.full,
     paddingVertical: Spacing.md + 4,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: Spacing.md,
-    shadowColor: Colors.gold,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 6,
   },
   ctaBtnDisabled: {
-    opacity: 0.6,
+    opacity: 0.5,
   },
   ctaText: {
-    fontFamily: Fonts.bold,
-    fontSize: 20,
-    color: Colors.background,
-    letterSpacing: 0.5,
+    fontFamily: Fonts.semiBold,
+    fontSize: 18,
+    color: Colors.white,
+    letterSpacing: 0.3,
   },
   restoreBtn: {
     alignItems: 'center',
@@ -286,16 +248,16 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   restoreText: {
-    fontFamily: Fonts.medium,
+    fontFamily: Fonts.regular,
     fontSize: 14,
     color: Colors.textMuted,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
     textDecorationLine: 'underline',
   },
   freeNote: {
     fontFamily: Fonts.italic,
     fontSize: 13,
-    color: Colors.textMuted,
+    color: Colors.textLight,
     textAlign: 'center',
     letterSpacing: 0.3,
   },

@@ -16,31 +16,23 @@ interface Props {
 export default function DeckCard({ deck }: Props) {
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: deck.cardColor }]}
+      style={styles.card}
       onPress={() => router.push(`/deck/${deck.id}`)}
-      activeOpacity={0.85}
+      activeOpacity={0.7}
     >
-      {/* Decorative corner accent */}
-      <View style={[styles.cornerAccent, { backgroundColor: deck.accentColor + '40' }]} />
-
-      <View style={styles.header}>
-        <Text style={styles.emoji}>{deck.emoji}</Text>
-        <View style={styles.badge}>
-          <Text style={[styles.badgeText, { color: deck.accentColor }]}>3 levels</Text>
+      <View style={styles.left}>
+        <View style={[styles.emojiWrap, { backgroundColor: deck.bgColor }]}>
+          <Text style={styles.emoji}>{deck.emoji}</Text>
         </View>
       </View>
 
-      <Text style={styles.title}>{deck.title}</Text>
-      <Text style={[styles.subtitle, { color: deck.accentColor }]}>{deck.subtitle}</Text>
-      <Text style={styles.description} numberOfLines={2}>
-        {deck.description}
-      </Text>
+      <View style={styles.body}>
+        <Text style={styles.title}>{deck.title}</Text>
+        <Text style={styles.subtitle}>{deck.subtitle}</Text>
+      </View>
 
-      <View style={[styles.footer, { borderTopColor: deck.accentColor + '30' }]}>
-        <Text style={styles.cardCount}>30 questions</Text>
-        <View style={[styles.arrow, { backgroundColor: deck.accentColor }]}>
-          <Text style={styles.arrowText}>→</Text>
-        </View>
+      <View style={[styles.arrow, { backgroundColor: deck.accentColor + '18' }]}>
+        <Text style={[styles.arrowText, { color: deck.accentColor }]}>›</Text>
       </View>
     </TouchableOpacity>
   );
@@ -48,87 +40,52 @@ export default function DeckCard({ deck }: Props) {
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: Radius.lg,
-    padding: Spacing.lg,
-    marginBottom: Spacing.md,
-    overflow: 'hidden',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.white,
+    borderRadius: Radius.md,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.md,
+    gap: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.border,
-    position: 'relative',
   },
-  cornerAccent: {
-    position: 'absolute',
-    top: -30,
-    right: -30,
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  left: {},
+  emojiWrap: {
+    width: 52,
+    height: 52,
+    borderRadius: Radius.sm,
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    justifyContent: 'center',
   },
   emoji: {
-    fontSize: 36,
+    fontSize: 26,
   },
-  badge: {
-    borderRadius: Radius.full,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    backgroundColor: Colors.background,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  badgeText: {
-    fontFamily: Fonts.medium,
-    fontSize: 12,
-    letterSpacing: 0.5,
+  body: {
+    flex: 1,
+    gap: 2,
   },
   title: {
-    fontFamily: Fonts.bold,
-    fontSize: 26,
+    fontFamily: Fonts.semiBold,
+    fontSize: 20,
     color: Colors.text,
-    marginBottom: 2,
-    letterSpacing: 0.3,
+    letterSpacing: 0.1,
   },
   subtitle: {
-    fontFamily: Fonts.mediumItalic,
-    fontSize: 14,
-    marginBottom: Spacing.sm,
-    letterSpacing: 0.5,
-  },
-  description: {
-    fontFamily: Fonts.regular,
-    fontSize: 14,
-    color: Colors.textMuted,
-    lineHeight: 20,
-    marginBottom: Spacing.md,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    borderTopWidth: 1,
-    paddingTop: Spacing.md,
-  },
-  cardCount: {
-    fontFamily: Fonts.medium,
+    fontFamily: Fonts.italic,
     fontSize: 13,
     color: Colors.textMuted,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
   arrow: {
-    width: 32,
-    height: 32,
+    width: 34,
+    height: 34,
     borderRadius: Radius.full,
     alignItems: 'center',
     justifyContent: 'center',
   },
   arrowText: {
-    color: Colors.white,
-    fontSize: 16,
-    fontFamily: Fonts.bold,
+    fontSize: 24,
+    lineHeight: 30,
   },
 });

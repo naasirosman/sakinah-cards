@@ -8,7 +8,7 @@ interface Props {
   accentColor?: string;
 }
 
-export default function ProgressBar({ current, total, accentColor = Colors.red }: Props) {
+export default function ProgressBar({ current, total, accentColor = Colors.gold }: Props) {
   const progress = total > 0 ? current / total : 0;
 
   return (
@@ -28,7 +28,7 @@ export default function ProgressBar({ current, total, accentColor = Colors.red }
 
 const styles = StyleSheet.create({
   track: {
-    height: 3,
+    height: 2,
     backgroundColor: Colors.border,
     borderRadius: Radius.full,
     overflow: 'hidden',

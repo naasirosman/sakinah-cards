@@ -16,7 +16,6 @@ import { Favourite, useFavourites } from '../hooks/useFavourites';
 export default function FavouritesScreen() {
   const { favourites, removeFavourite } = useFavourites();
 
-  // Group by deck
   const grouped: Record<string, Favourite[]> = {};
   for (const fav of favourites) {
     if (!grouped[fav.deckId]) grouped[fav.deckId] = [];
@@ -30,19 +29,17 @@ export default function FavouritesScreen() {
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Text style={styles.backArrow}>←</Text>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Saved Cards</Text>
+        <Text style={styles.headerTitle}>Saved</Text>
         <View style={styles.headerRight}>
           {favourites.length > 0 && (
-            <View style={styles.countBadge}>
-              <Text style={styles.countText}>{favourites.length}</Text>
-            </View>
+            <Text style={styles.countText}>{favourites.length}</Text>
           )}
         </View>
       </View>
@@ -54,12 +51,9 @@ export default function FavouritesScreen() {
           <Text style={styles.emptyIcon}>🤍</Text>
           <Text style={styles.emptyTitle}>No saved cards yet</Text>
           <Text style={styles.emptyText}>
-            Start a deck and save the questions that speak to you.
+            Save the questions that speak to you.
           </Text>
-          <TouchableOpacity
-            style={styles.startBtn}
-            onPress={() => router.back()}
-          >
+          <TouchableOpacity style={styles.startBtn} onPress={() => router.back()}>
             <Text style={styles.startBtnText}>Explore Decks</Text>
           </TouchableOpacity>
         </View>
@@ -84,20 +78,13 @@ export default function FavouritesScreen() {
                 {items.map((fav) => (
                   <View
                     key={fav.id}
-                    style={[styles.favCard, { backgroundColor: deck.cardColor, borderColor: deck.accentColor + '30' }]}
+                    style={[styles.favCard, { borderLeftColor: deck.accentColor }]}
                   >
                     <View style={styles.favTop}>
-                      <View
-                        style={[styles.levelBadge, { backgroundColor: deck.accentColor + '25' }]}
-                      >
-                        <Text style={[styles.levelText, { color: deck.accentColor }]}>
-                          {fav.level}
-                        </Text>
-                      </View>
-                      <TouchableOpacity
-                        style={styles.removeBtn}
-                        onPress={() => removeFavourite(fav.id)}
-                      >
+                      <Text style={[styles.levelText, { color: deck.accentColor }]}>
+                        {fav.level}
+                      </Text>
+                      <TouchableOpacity onPress={() => removeFavourite(fav.id)}>
                         <Text style={styles.removeIcon}>✕</Text>
                       </TouchableOpacity>
                     </View>
@@ -127,41 +114,29 @@ const styles = StyleSheet.create({
   backBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.surface,
-    borderWidth: 1,
-    borderColor: Colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
   backArrow: {
-    fontSize: 18,
+    fontSize: 22,
     color: Colors.text,
   },
   headerTitle: {
-    fontFamily: Fonts.bold,
-    fontSize: 24,
+    fontFamily: Fonts.boldItalic,
+    fontSize: 28,
     color: Colors.text,
     flex: 1,
     textAlign: 'center',
-    letterSpacing: 0.3,
+    letterSpacing: -0.2,
   },
   headerRight: {
     width: 40,
     alignItems: 'center',
   },
-  countBadge: {
-    backgroundColor: Colors.red,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   countText: {
-    fontFamily: Fonts.bold,
-    fontSize: 12,
-    color: Colors.white,
+    fontFamily: Fonts.semiBold,
+    fontSize: 13,
+    color: Colors.textMuted,
   },
   divider: {
     height: 1,
@@ -185,7 +160,7 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   emptyIcon: {
-    fontSize: 52,
+    fontSize: 48,
     marginBottom: Spacing.sm,
   },
   emptyTitle: {
@@ -205,16 +180,15 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
-    backgroundColor: Colors.surface,
     borderRadius: Radius.full,
     borderWidth: 1,
-    borderColor: Colors.red,
+    borderColor: Colors.border,
   },
   startBtnText: {
     fontFamily: Fonts.semiBold,
     fontSize: 15,
-    color: Colors.red,
-    letterSpacing: 0.5,
+    color: Colors.text,
+    letterSpacing: 0.3,
   },
   group: {
     gap: Spacing.sm,
@@ -226,18 +200,21 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   groupEmoji: {
-    fontSize: 20,
+    fontSize: 18,
   },
   groupTitle: {
-    fontFamily: Fonts.bold,
-    fontSize: 20,
+    fontFamily: Fonts.semiBold,
+    fontSize: 18,
     color: Colors.text,
-    letterSpacing: 0.3,
+    letterSpacing: 0.1,
   },
   favCard: {
+    backgroundColor: Colors.white,
     borderRadius: Radius.md,
     padding: Spacing.md,
     borderWidth: 1,
+    borderColor: Colors.border,
+    borderLeftWidth: 3,
     gap: Spacing.sm,
   },
   favTop: {
@@ -245,33 +222,24 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  levelBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: Radius.full,
-  },
   levelText: {
-    fontFamily: Fonts.medium,
-    fontSize: 11,
-    letterSpacing: 1,
+    fontFamily: Fonts.semiBold,
+    fontSize: 10,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
   },
   removeBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: Colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 4,
   },
   removeIcon: {
-    fontSize: 12,
-    color: Colors.textMuted,
+    fontSize: 13,
+    color: Colors.textLight,
   },
   favQuestion: {
     fontFamily: Fonts.semiBold,
     fontSize: 16,
     color: Colors.text,
     lineHeight: 24,
-    letterSpacing: 0.2,
+    letterSpacing: 0.1,
   },
 });

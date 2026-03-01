@@ -19,14 +19,12 @@ interface Props {
 export default function QuestionCard({
   question,
   emoji,
-  cardColor,
   accentColor,
   cardIndex,
 }: Props) {
   const [flipped, setFlipped] = useState(false);
   const flipAnim = useRef(new Animated.Value(0)).current;
 
-  // Reset flip when card changes
   useEffect(() => {
     setFlipped(false);
     Animated.timing(flipAnim, {
@@ -76,31 +74,16 @@ export default function QuestionCard({
             styles.card,
             styles.front,
             {
-              backgroundColor: cardColor,
-              borderColor: accentColor + '50',
               transform: [{ rotateY: frontRotate }],
               opacity: frontOpacity,
             },
           ]}
         >
-          {/* Decorative background circles */}
-          <View style={[styles.circleTop, { backgroundColor: accentColor + '15' }]} />
-          <View style={[styles.circleBottom, { backgroundColor: accentColor + '10' }]} />
-
           <View style={styles.innerContent}>
-            <Text style={styles.emojiLarge}>{emoji}</Text>
-
-            <View style={[styles.divider, { backgroundColor: accentColor + '60' }]} />
-
+            <Text style={[styles.brand, { color: accentColor }]}>SAKINA</Text>
+            <Text style={styles.emoji}>{emoji}</Text>
             <Text style={styles.questionText}>{question}</Text>
-
-            <View style={[styles.divider, { backgroundColor: accentColor + '60' }]} />
-
-            <View style={styles.hintRow}>
-              <Text style={[styles.hintDot, { color: accentColor }]}>◆</Text>
-              <Text style={[styles.hintText, { color: accentColor }]}>Tap to reflect</Text>
-              <Text style={[styles.hintDot, { color: accentColor }]}>◆</Text>
-            </View>
+            <Text style={styles.hint}>Tap to reflect</Text>
           </View>
         </Animated.View>
 
@@ -110,25 +93,21 @@ export default function QuestionCard({
             styles.card,
             styles.back,
             {
-              backgroundColor: '#0A0305',
-              borderColor: accentColor + '60',
+              backgroundColor: Colors.surface,
               transform: [{ rotateY: backRotate }],
               opacity: backOpacity,
             },
           ]}
         >
-          <View style={[styles.circleTopBack, { backgroundColor: accentColor + '20' }]} />
-          <View style={[styles.circleBottomBack, { backgroundColor: accentColor + '10' }]} />
-
           <View style={styles.innerContent}>
             <Text style={styles.backSymbol}>☾</Text>
             <Text style={[styles.backTitle, { color: accentColor }]}>Reflect Together</Text>
-            <View style={[styles.divider, { backgroundColor: accentColor + '50' }]} />
+            <View style={[styles.divider, { backgroundColor: Colors.border }]} />
             <Text style={styles.backQuote}>
               "Listen with your heart.{'\n'}Answer with honesty."
             </Text>
-            <View style={[styles.divider, { backgroundColor: accentColor + '50' }]} />
-            <Text style={styles.backSub}>Tap to return to the question</Text>
+            <View style={[styles.divider, { backgroundColor: Colors.border }]} />
+            <Text style={styles.backSub}>Tap to return</Text>
           </View>
         </Animated.View>
       </View>
@@ -139,19 +118,25 @@ export default function QuestionCard({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 380,
+    height: 400,
   },
   card: {
     position: 'absolute',
     width: '100%',
     height: '100%',
     borderRadius: Radius.xl,
-    borderWidth: 1,
     backfaceVisibility: 'hidden',
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
+    backgroundColor: Colors.white,
+    // subtle shadow
+    shadowColor: Colors.text,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 16,
+    elevation: 3,
   },
   front: {},
   back: {},
@@ -160,74 +145,42 @@ const styles = StyleSheet.create({
     width: '100%',
     gap: Spacing.md,
   },
-  circleTop: {
-    position: 'absolute',
-    top: -40,
-    right: -40,
-    width: 140,
-    height: 140,
-    borderRadius: 70,
+  brand: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 11,
+    letterSpacing: 5,
   },
-  circleBottom: {
-    position: 'absolute',
-    bottom: -50,
-    left: -50,
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-  },
-  circleTopBack: {
-    position: 'absolute',
-    top: -50,
-    left: -50,
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-  },
-  circleBottomBack: {
-    position: 'absolute',
-    bottom: -40,
-    right: -40,
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-  },
-  emojiLarge: {
-    fontSize: 42,
-  },
-  divider: {
-    width: 40,
-    height: 1,
+  emoji: {
+    fontSize: 36,
+    marginVertical: Spacing.xs,
   },
   questionText: {
     fontFamily: Fonts.semiBold,
-    fontSize: 22,
+    fontSize: 24,
     color: Colors.text,
     textAlign: 'center',
-    lineHeight: 32,
-    letterSpacing: 0.3,
+    lineHeight: 34,
+    letterSpacing: 0.2,
   },
-  hintRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-  },
-  hintDot: {
-    fontSize: 8,
-  },
-  hintText: {
-    fontFamily: Fonts.mediumItalic,
-    fontSize: 13,
+  hint: {
+    fontFamily: Fonts.italic,
+    fontSize: 12,
+    color: Colors.textLight,
     letterSpacing: 0.5,
+    marginTop: Spacing.sm,
+  },
+  divider: {
+    width: 32,
+    height: 1,
   },
   backSymbol: {
-    fontSize: 36,
-    color: Colors.text,
+    fontSize: 32,
+    color: Colors.textLight,
   },
   backTitle: {
     fontFamily: Fonts.bold,
     fontSize: 20,
-    letterSpacing: 1,
+    letterSpacing: 0.5,
   },
   backQuote: {
     fontFamily: Fonts.semiBoldItalic,
@@ -235,12 +188,12 @@ const styles = StyleSheet.create({
     color: Colors.text,
     textAlign: 'center',
     lineHeight: 28,
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
   backSub: {
     fontFamily: Fonts.italic,
     fontSize: 12,
-    color: Colors.textMuted,
+    color: Colors.textLight,
     letterSpacing: 0.5,
   },
 });

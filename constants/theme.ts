@@ -1,38 +1,31 @@
 export const Colors = {
-  // Dark red theme - primary backgrounds
-  background: '#0F0608',        // near black with red tint
-  surface: '#1A0A0C',           // card background
-  surfaceElevated: '#240D10',   // slightly elevated surface
-  surfaceCard: '#2D1215',       // card deck background
+  // Light backgrounds
+  background: '#FAFAF8',        // warm off-white
+  surface: '#F4F0EA',           // soft parchment
+  surfaceElevated: '#EDE7DE',   // slightly deeper parchment
+  surfaceCard: '#FFFFFF',       // pure white card
 
-  // Red accent family
-  crimson: '#8B1A2B',           // deep crimson
-  red: '#C0392B',               // main red accent
-  redLight: '#E05A4A',          // lighter red
-  redGlow: '#FF6B5B',           // glowing red highlight
-  rose: '#D4544A',              // rose red
-
-  // Gold accents (keep some warmth)
-  gold: '#C9943C',              // warm gold
-  goldLight: '#E8B860',         // lighter gold
+  // Accent (warm amber/gold — used for branding only)
+  gold: '#9A7A52',              // muted warm amber
+  goldLight: '#B8966E',         // lighter amber
 
   // Text
-  text: '#F5EAE8',              // warm off-white
-  textMuted: '#A08080',         // muted text
-  textLight: '#C8A8A8',         // light text
+  text: '#1C1410',              // near-black warm
+  textMuted: '#9E8E80',         // warm mid-gray
+  textLight: '#C4B5A8',         // lighter warm gray
 
   // Borders & separators
-  border: '#3D1A1C',            // subtle border
-  divider: '#8B1A2B',           // gold/red divider
+  border: '#E8E0D5',            // barely-there warm border
+  divider: '#D4C4B0',           // soft divider
 
   // Status
   white: '#FFFFFF',
   black: '#000000',
 
-  // Deck-specific bg overlays
-  deckGreen: '#0D1F18',
-  deckGold: '#1F1608',
-  deckDark: '#0F0A1A',
+  // Deck-specific bg tints (very subtle)
+  deckSage: '#F4F8F2',          // getting to know
+  deckCream: '#FAF6EE',         // married couples
+  deckSlate: '#F2F6FA',         // faith & deen
 };
 
 export const Fonts = {
