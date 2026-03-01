@@ -6,7 +6,8 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@expo-google-fonts/cormorant-garamond": "^0.4.1",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.4",
+    "patch-package": "^8.0.1",
     "typescript": "~5.9.2"
   },
   "private": true
