@@ -24,7 +24,6 @@ export default function HomeScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.bismillah}>بِسْمِ اللَّهِ</Text>
           <TouchableOpacity
             style={styles.heartBtn}
             onPress={() => router.push('/favourites')}
@@ -77,12 +76,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingTop: Spacing.md,
     paddingBottom: Spacing.sm,
-  },
-  bismillah: {
-    fontFamily: Fonts.regular,
-    fontSize: 15,
-    color: Colors.textMuted,
-    letterSpacing: 0.5,
   },
   heartBtn: {
     width: 40,
