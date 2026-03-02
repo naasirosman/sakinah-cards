@@ -10,31 +10,32 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import LevelCard from '../../components/LevelCard';
-import { DECKS, Level } from '../../constants/decks';
-import { Colors, Fonts, Radius, Spacing } from '../../constants/theme';
-import { usePurchase } from '../../hooks/usePurchase';
+import TopicCard from '../../../components/TopicCard';
+import { getDeck, Level } from '../../../constants/decks';
+import { Colors, Fonts, Radius, Spacing } from '../../../constants/theme';
 
-export default function DeckScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const deck = DECKS.find((d) => d.id === id);
-  const { isLevelLocked } = usePurchase();
+const LEVEL_LABELS: Record<Level, string> = {
+  close: 'Close',
+  closer: 'Closer',
+  closest: 'Closest',
+};
 
-  if (!deck) {
+export default function TopicScreen() {
+  const { id, level } = useLocalSearchParams<{ id: string; level: Level }>();
+  const deck = getDeck(id);
+  const deckLevel = deck?.levels.find((l) => l.level === level);
+
+  if (!deck || !deckLevel) {
     return (
       <SafeAreaView style={styles.safe}>
-        <Text style={styles.errorText}>Deck not found</Text>
+        <Text style={styles.errorText}>Not found</Text>
       </SafeAreaView>
     );
   }
 
-  function handleLevelPress(level: Level) {
+  function handleTopicPress(topicId: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (isLevelLocked(level)) {
-      router.push('/paywall');
-      return;
-    }
-    router.push(`/deck/${id}/${level}`);
+    router.push(`/card/${id}/${level}/${topicId}`);
   }
 
   return (
@@ -50,32 +51,28 @@ export default function DeckScreen() {
           <Text style={styles.backArrow}>←</Text>
         </TouchableOpacity>
 
-        {/* Hero section */}
+        {/* Hero */}
         <View style={styles.hero}>
           <Text style={styles.emoji}>{deck.emoji}</Text>
-          <Text style={[styles.deckLabel, { color: deck.accentColor }]}>
-            {deck.subtitle.toUpperCase()}
+          <Text style={[styles.levelLabel, { color: deck.accentColor }]}>
+            {LEVEL_LABELS[level].toUpperCase()}
           </Text>
           <Text style={styles.title}>{deck.title}</Text>
-          <Text style={styles.description}>{deck.description}</Text>
+          <Text style={styles.description}>{deckLevel.description}</Text>
         </View>
 
-        {/* Level picker */}
-        <View style={styles.levelSection}>
-          <Text style={styles.sectionTitle}>Choose a level</Text>
-
-          <View style={styles.levels}>
-            {deck.levels.map((lvl, index) => (
-              <LevelCard
-                key={lvl.level}
-                level={lvl.level}
-                label={lvl.label}
-                description={lvl.description}
+        {/* Topic list */}
+        <View style={styles.topicSection}>
+          <Text style={styles.sectionTitle}>Choose a topic</Text>
+          <View style={styles.topics}>
+            {deckLevel.topics.map((topic) => (
+              <TopicCard
+                key={topic.id}
+                name={topic.name}
+                emoji={topic.emoji}
+                questionCount={topic.questions.length}
                 accentColor={deck.accentColor}
-                cardColor={deck.cardColor}
-                onPress={() => handleLevelPress(lvl.level)}
-                index={index}
-                locked={isLevelLocked(lvl.level)}
+                onPress={() => handleTopicPress(topic.id)}
               />
             ))}
           </View>
@@ -121,7 +118,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     marginBottom: Spacing.xs,
   },
-  deckLabel: {
+  levelLabel: {
     fontFamily: Fonts.semiBold,
     fontSize: 11,
     letterSpacing: 5,
@@ -143,7 +140,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.md,
     marginTop: Spacing.xs,
   },
-  levelSection: {
+  topicSection: {
     marginTop: Spacing.sm,
   },
   sectionTitle: {
@@ -154,7 +151,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     marginBottom: Spacing.md,
   },
-  levels: {
+  topics: {
     gap: 0,
   },
 });

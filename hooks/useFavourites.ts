@@ -7,6 +7,8 @@ export interface Favourite {
   deckTitle: string;
   deckEmoji: string;
   level: string;
+  topicId: string;
+  topicName: string;
   question: string;
 }
 

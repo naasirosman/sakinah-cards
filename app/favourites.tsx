@@ -82,7 +82,7 @@ export default function FavouritesScreen() {
                   >
                     <View style={styles.favTop}>
                       <Text style={[styles.levelText, { color: deck.accentColor }]}>
-                        {fav.level}
+                        {fav.level.toUpperCase()}{fav.topicName ? ` · ${fav.topicName}` : ''}
                       </Text>
                       <TouchableOpacity onPress={() => removeFavourite(fav.id)}>
                         <Text style={styles.removeIcon}>✕</Text>

@@ -11,12 +11,12 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import ProgressBar from '../../../components/ProgressBar';
-import QuestionCard from '../../../components/QuestionCard';
-import { getDeck, Level } from '../../../constants/decks';
-import { Colors, Fonts, Radius, Spacing } from '../../../constants/theme';
-import { useFavourites } from '../../../hooks/useFavourites';
-import { usePurchase } from '../../../hooks/usePurchase';
+import ProgressBar from '../../../../components/ProgressBar';
+import QuestionCard from '../../../../components/QuestionCard';
+import { getDeck, getDeckLevelTopic, Level } from '../../../../constants/decks';
+import { Colors, Fonts, Radius, Spacing } from '../../../../constants/theme';
+import { useFavourites } from '../../../../hooks/useFavourites';
+import { usePurchase } from '../../../../hooks/usePurchase';
 
 const LEVEL_LABELS: Record<Level, string> = {
   close: 'Close',
@@ -25,11 +25,15 @@ const LEVEL_LABELS: Record<Level, string> = {
 };
 
 export default function CardScreen() {
-  const { id, level } = useLocalSearchParams<{ id: string; level: Level }>();
+  const { id, level, topicId } = useLocalSearchParams<{
+    id: string;
+    level: Level;
+    topicId: string;
+  }>();
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const deckRaw = getDeck(id);
-  const deckLevelRaw = deckRaw?.levels.find((l) => l.level === level);
+  const deck = getDeck(id);
+  const topic = getDeckLevelTopic(id, level, topicId);
   const { addFavourite, removeFavourite, isFavourite } = useFavourites();
   const { isLevelLocked, isLoading } = usePurchase();
 
@@ -39,7 +43,7 @@ export default function CardScreen() {
     }
   }, [isLoading, level]);
 
-  if (!deckRaw || !deckLevelRaw) {
+  if (!deck || !topic) {
     return (
       <SafeAreaView style={styles.safe}>
         <Text style={styles.errorText}>Not found</Text>
@@ -47,9 +51,7 @@ export default function CardScreen() {
     );
   }
 
-  const deck = deckRaw;
-  const deckLevel = deckLevelRaw;
-  const questions = deckLevel.questions;
+  const questions = topic.questions;
   const currentQuestion = questions[currentIndex];
   const favId = currentQuestion.id;
   const saved = isFavourite(favId);
@@ -79,6 +81,8 @@ export default function CardScreen() {
         deckTitle: deck.title,
         deckEmoji: deck.emoji,
         level: LEVEL_LABELS[level],
+        topicId: topic.id,
+        topicName: topic.name,
         question: currentQuestion.text,
       });
     }
@@ -112,7 +116,7 @@ export default function CardScreen() {
           <Text style={[styles.deckLabel, { color: deck.accentColor }]}>
             {LEVEL_LABELS[level].toUpperCase()}
           </Text>
-          <Text style={styles.headerTitle}>{deck.title}</Text>
+          <Text style={styles.headerTitle}>{topic.name}</Text>
         </View>
 
         <TouchableOpacity style={styles.iconBtn} onPress={handleShare}>
@@ -140,6 +144,7 @@ export default function CardScreen() {
           cardColor={deck.cardColor}
           accentColor={deck.accentColor}
           cardIndex={currentIndex}
+          theme={currentQuestion.theme}
         />
       </View>
 
@@ -174,12 +179,6 @@ export default function CardScreen() {
           <Text style={[styles.navBtnText, { color: Colors.white }]}>→</Text>
         </TouchableOpacity>
       </View>
-
-      {currentIndex === questions.length - 1 && (
-        <View style={styles.completionHint}>
-          <Text style={styles.completionText}>You've reached the last card</Text>
-        </View>
-      )}
     </SafeAreaView>
   );
 }
@@ -286,15 +285,5 @@ const styles = StyleSheet.create({
   },
   saveIcon: {
     fontSize: 22,
-  },
-  completionHint: {
-    alignItems: 'center',
-    paddingBottom: Spacing.md,
-  },
-  completionText: {
-    fontFamily: Fonts.italic,
-    fontSize: 13,
-    color: Colors.textMuted,
-    letterSpacing: 0.3,
   },
 });

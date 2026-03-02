@@ -6,7 +6,17 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
+import { CardTheme } from '../constants/decks';
 import { Colors, Fonts, Radius, Spacing } from '../constants/theme';
+
+const THEME_LABELS: Record<CardTheme, string> = {
+  scenario: 'Scenario',
+  'what-if': 'What if…',
+  challenge: 'Challenge',
+  reveal: 'Reveal',
+  reflect: 'Reflect',
+  imagine: 'Imagine',
+};
 
 interface Props {
   question: string;
@@ -14,6 +24,7 @@ interface Props {
   cardColor: string;
   accentColor: string;
   cardIndex: number;
+  theme?: CardTheme;
 }
 
 export default function QuestionCard({
@@ -21,6 +32,7 @@ export default function QuestionCard({
   emoji,
   accentColor,
   cardIndex,
+  theme,
 }: Props) {
   const [flipped, setFlipped] = useState(false);
   const flipAnim = useRef(new Animated.Value(0)).current;
@@ -82,6 +94,13 @@ export default function QuestionCard({
           <View style={styles.innerContent}>
             <Text style={[styles.brand, { color: accentColor }]}>SAKINA</Text>
             <Text style={styles.emoji}>{emoji}</Text>
+            {theme && (
+              <View style={[styles.chip, { backgroundColor: accentColor + '20' }]}>
+                <Text style={[styles.chipText, { color: accentColor }]}>
+                  {THEME_LABELS[theme]}
+                </Text>
+              </View>
+            )}
             <Text style={styles.questionText}>{question}</Text>
             <Text style={styles.hint}>Tap to reflect</Text>
           </View>
@@ -168,6 +187,17 @@ const styles = StyleSheet.create({
     color: Colors.textLight,
     letterSpacing: 0.5,
     marginTop: Spacing.sm,
+  },
+  chip: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 4,
+    borderRadius: Radius.full,
+  },
+  chipText: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 11,
+    letterSpacing: 1.5,
+    textTransform: 'uppercase',
   },
   divider: {
     width: 32,
