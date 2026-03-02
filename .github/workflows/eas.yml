@@ -35,20 +35,11 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish OTA update
-        env:
-          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
-          # Use branch name as EAS channel (main → production, others → their own channel)
-          BRANCH="${GITHUB_REF_NAME}"
-          if [ "$BRANCH" = "main" ]; then
-            CHANNEL="production"
-          else
-            CHANNEL="$BRANCH"
-          fi
           eas update \
-            --branch "$CHANNEL" \
+            --branch "production" \
             --environment production \
-            --message "$COMMIT_MESSAGE" \
+            --message "App update" \
             --non-interactive
 
   # ── Full native build + TestFlight submit (triggered by version tag) ──────
