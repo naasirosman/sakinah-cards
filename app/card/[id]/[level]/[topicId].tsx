@@ -2,17 +2,18 @@ import * as Haptics from 'expo-haptics';
 import * as Sharing from 'expo-sharing';
 import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { captureRef } from 'react-native-view-shot';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ProgressBar from '../../../../components/ProgressBar';
 import QuestionCard from '../../../../components/QuestionCard';
+import ShareCard from '../../../../components/ShareCard';
 import { getDeck, getDeckLevelTopic, Level } from '../../../../constants/decks';
 import { Colors, Fonts, Radius, Spacing } from '../../../../constants/theme';
 import { useFavourites } from '../../../../hooks/useFavourites';
@@ -31,6 +32,7 @@ export default function CardScreen() {
     topicId: string;
   }>();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const shareCardRef = useRef<View>(null);
 
   const deck = getDeck(id);
   const topic = getDeckLevelTopic(id, level, topicId);
@@ -89,16 +91,12 @@ export default function CardScreen() {
   }
 
   async function handleShare() {
-    const shareText = `Sakina Cards ${deck.emoji}\n\n"${currentQuestion.text}"\n\nsakinacards.app`;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     try {
-      const canShare = await Sharing.isAvailableAsync();
-      if (canShare) {
-        await Share.share({ message: shareText });
-      } else {
-        await Share.share({ message: shareText });
-      }
+      const uri = await captureRef(shareCardRef, { format: 'png', quality: 1 });
+      await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Share this card' });
     } catch (_) {
-      await Share.share({ message: shareText });
+      await Sharing.shareAsync('', { dialogTitle: 'Share this card' });
     }
   }
 
@@ -178,6 +176,17 @@ export default function CardScreen() {
         >
           <Text style={[styles.navBtnText, { color: Colors.white }]}>→</Text>
         </TouchableOpacity>
+      </View>
+
+      {/* Off-screen card used for image capture on share */}
+      <View style={styles.offScreen} pointerEvents="none">
+        <ShareCard
+          ref={shareCardRef}
+          question={currentQuestion.text}
+          emoji={deck.emoji}
+          accentColor={deck.accentColor}
+          theme={currentQuestion.theme}
+        />
       </View>
     </SafeAreaView>
   );
@@ -285,5 +294,10 @@ const styles = StyleSheet.create({
   },
   saveIcon: {
     fontSize: 22,
+  },
+  offScreen: {
+    position: 'absolute',
+    left: -9999,
+    top: 0,
   },
 });

@@ -747,5 +747,22 @@ export function getDeckLevelTopic(
   level: Level,
   topicId: string
 ): Topic | undefined {
+  if (topicId === 'all') {
+    return getAllTopicsAsOne(deckId, level);
+  }
   return getDeckLevel(deckId, level)?.topics.find((t) => t.id === topicId);
+}
+
+export function getAllTopicsAsOne(
+  deckId: string,
+  level: Level
+): Topic | undefined {
+  const deckLevel = getDeckLevel(deckId, level);
+  if (!deckLevel) return undefined;
+  return {
+    id: 'all',
+    name: 'All Cards',
+    emoji: '✨',
+    questions: deckLevel.topics.flatMap((t) => t.questions),
+  };
 }
