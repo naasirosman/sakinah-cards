@@ -6,6 +6,8 @@ on:
       - '**'       # OTA update on every branch push
     tags:
       - 'v*'       # Full build + submit on version tags (e.g. v1.1.0)
+    paths-ignore:
+      - '.github/workflows/**'
 
 jobs:
   # ── OTA update (JS-only, instant, no App Store review) ───────────────────
