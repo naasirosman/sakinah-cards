@@ -35,6 +35,8 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Publish OTA update
+        env:
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
         run: |
           # Use branch name as EAS channel (main → production, others → their own channel)
           BRANCH="${GITHUB_REF_NAME}"
@@ -46,7 +48,7 @@ jobs:
           eas update \
             --branch "$CHANNEL" \
             --environment production \
-            --message "${{ github.event.head_commit.message }}" \
+            --message "$COMMIT_MESSAGE" \
             --non-interactive
 
   # ── Full native build + TestFlight submit (triggered by version tag) ──────
