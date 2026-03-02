@@ -9,6 +9,7 @@ import {
   CormorantGaramond_700Bold_Italic,
   useFonts,
 } from '@expo-google-fonts/cormorant-garamond';
+import * as Updates from 'expo-updates';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
@@ -33,6 +34,19 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded]);
+
+  useEffect(() => {
+    if (!Updates.isEnabled) return;
+    (async () => {
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch {}
+    })();
+  }, []);
 
   if (!fontsLoaded) return null;
 
