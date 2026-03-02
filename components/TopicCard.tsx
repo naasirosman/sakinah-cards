@@ -85,6 +85,6 @@ const styles = StyleSheet.create({
   },
   arrowText: {
     fontSize: 24,
-    lineHeight: 30,
+    lineHeight: 24,
   },
 });
