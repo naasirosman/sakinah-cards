@@ -137,7 +137,7 @@ Push JS/asset updates without a full store release:
 npx expo install expo-updates
 
 # Publish an update
-eas update --branch production --message "Fix paywall copy"
+eas update --branch production --environment production --message "Fix paywall copy"
 ```
 
 ---

@@ -37,7 +37,7 @@ export default function HomeScreen() {
 
         {/* Title section */}
         <View style={styles.titleSection}>
-          <Text style={styles.title}>Sakina Cards</Text>
+          <Text style={styles.title}>ota Cards</Text>
           <Text style={styles.subtitle}>Deep Conversation Decks</Text>
           <View style={styles.divider} />
         </View>
