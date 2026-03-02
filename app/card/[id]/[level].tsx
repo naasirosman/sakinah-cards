@@ -4,7 +4,6 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import {
-  Alert,
   Share,
   StyleSheet,
   Text,
@@ -34,7 +33,6 @@ export default function CardScreen() {
   const { addFavourite, removeFavourite, isFavourite } = useFavourites();
   const { isLevelLocked, isLoading } = usePurchase();
 
-  // Guard: redirect to paywall if level is locked (handles direct deep-links)
   useEffect(() => {
     if (!isLoading && isLevelLocked(level)) {
       router.replace('/paywall');
@@ -49,7 +47,6 @@ export default function CardScreen() {
     );
   }
 
-  // Narrowed non-nullable refs
   const deck = deckRaw;
   const deckLevel = deckLevelRaw;
   const questions = deckLevel.questions;
@@ -92,7 +89,6 @@ export default function CardScreen() {
     try {
       const canShare = await Sharing.isAvailableAsync();
       if (canShare) {
-        // Use native share for text
         await Share.share({ message: shareText });
       } else {
         await Share.share({ message: shareText });
@@ -102,30 +98,25 @@ export default function CardScreen() {
     }
   }
 
-  const progress = (currentIndex + 1) / questions.length;
-
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: deck.bgColor }]} edges={['top', 'bottom']}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
 
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backArrow}>←</Text>
+        <TouchableOpacity style={styles.iconBtn} onPress={() => router.back()}>
+          <Text style={styles.iconBtnText}>←</Text>
         </TouchableOpacity>
+
         <View style={styles.headerCenter}>
+          <Text style={[styles.deckLabel, { color: deck.accentColor }]}>
+            {LEVEL_LABELS[level].toUpperCase()}
+          </Text>
           <Text style={styles.headerTitle}>{deck.title}</Text>
-          <View style={[styles.levelBadge, { backgroundColor: deck.accentColor + '30' }]}>
-            <Text style={[styles.levelBadgeText, { color: deck.accentColor }]}>
-              {LEVEL_LABELS[level]}
-            </Text>
-          </View>
         </View>
-        <TouchableOpacity style={styles.shareBtn} onPress={handleShare}>
-          <Text style={styles.shareIcon}>↑</Text>
+
+        <TouchableOpacity style={styles.iconBtn} onPress={handleShare}>
+          <Text style={styles.iconBtnText}>↑</Text>
         </TouchableOpacity>
       </View>
 
@@ -154,42 +145,23 @@ export default function CardScreen() {
 
       {/* Controls */}
       <View style={styles.controls}>
-        {/* Prev */}
         <TouchableOpacity
-          style={[
-            styles.navBtn,
-            currentIndex === 0 && styles.navBtnDisabled,
-          ]}
+          style={[styles.navBtn, currentIndex === 0 && styles.navBtnDisabled]}
           onPress={handlePrev}
           disabled={currentIndex === 0}
         >
-          <Text
-            style={[
-              styles.navBtnText,
-              currentIndex === 0 && styles.navBtnTextDisabled,
-            ]}
-          >
-            ←
-          </Text>
+          <Text style={styles.navBtnText}>←</Text>
         </TouchableOpacity>
 
-        {/* Save */}
         <TouchableOpacity
-          style={[
-            styles.saveBtn,
-            saved && { backgroundColor: deck.accentColor + '30', borderColor: deck.accentColor },
-          ]}
+          style={[styles.saveBtn, saved && { borderColor: deck.accentColor }]}
           onPress={handleSave}
         >
-          <Text style={[styles.saveIcon, saved && { color: deck.accentColor }]}>
+          <Text style={[styles.saveIcon, { color: saved ? deck.accentColor : Colors.textMuted }]}>
             {saved ? '♥' : '♡'}
-          </Text>
-          <Text style={[styles.saveText, saved && { color: deck.accentColor }]}>
-            {saved ? 'Saved' : 'Save'}
           </Text>
         </TouchableOpacity>
 
-        {/* Next */}
         <TouchableOpacity
           style={[
             styles.navBtn,
@@ -203,12 +175,9 @@ export default function CardScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Completion state */}
       {currentIndex === questions.length - 1 && (
         <View style={styles.completionHint}>
-          <Text style={styles.completionText}>
-            ✦ You've reached the last card ✦
-          </Text>
+          <Text style={styles.completionText}>You've reached the last card</Text>
         </View>
       )}
     </SafeAreaView>
@@ -233,55 +202,35 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     gap: Spacing.sm,
   },
-  backBtn: {
+  iconBtn: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.surface,
+    borderRadius: Radius.full,
+    backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  backArrow: {
+  iconBtnText: {
     fontSize: 18,
     color: Colors.text,
   },
   headerCenter: {
     flex: 1,
     alignItems: 'center',
-    gap: 4,
+    gap: 2,
+  },
+  deckLabel: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 10,
+    letterSpacing: 4,
   },
   headerTitle: {
     fontFamily: Fonts.semiBold,
     fontSize: 16,
     color: Colors.text,
-    letterSpacing: 0.3,
-  },
-  levelBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-    borderRadius: Radius.full,
-  },
-  levelBadgeText: {
-    fontFamily: Fonts.medium,
-    fontSize: 11,
-    letterSpacing: 1,
-  },
-  shareBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: Colors.surface,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  shareIcon: {
-    fontSize: 18,
-    color: Colors.text,
-    fontFamily: Fonts.bold,
+    letterSpacing: 0.2,
   },
   progressContainer: {
     paddingHorizontal: Spacing.lg,
@@ -290,7 +239,7 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontFamily: Fonts.medium,
-    fontSize: 12,
+    fontSize: 11,
     color: Colors.textMuted,
     textAlign: 'right',
     letterSpacing: 0.5,
@@ -306,13 +255,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.lg,
-    gap: Spacing.md,
+    gap: Spacing.lg,
   },
   navBtn: {
-    width: 52,
-    height: 52,
+    width: 56,
+    height: 56,
     borderRadius: Radius.full,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.border,
     alignItems: 'center',
@@ -324,33 +273,19 @@ const styles = StyleSheet.create({
   navBtnText: {
     fontSize: 20,
     color: Colors.text,
-    fontFamily: Fonts.regular,
-  },
-  navBtnTextDisabled: {
-    color: Colors.textMuted,
   },
   saveBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
+    width: 56,
+    height: 56,
     borderRadius: Radius.full,
-    backgroundColor: Colors.surface,
+    backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.border,
-    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
   },
   saveIcon: {
-    fontSize: 18,
-    color: Colors.textMuted,
-  },
-  saveText: {
-    fontFamily: Fonts.medium,
-    fontSize: 15,
-    color: Colors.textMuted,
-    letterSpacing: 0.5,
+    fontSize: 22,
   },
   completionHint: {
     alignItems: 'center',
@@ -360,6 +295,6 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.italic,
     fontSize: 13,
     color: Colors.textMuted,
-    letterSpacing: 0.5,
+    letterSpacing: 0.3,
   },
 });

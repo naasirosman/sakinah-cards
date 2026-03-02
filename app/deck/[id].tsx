@@ -39,7 +39,7 @@ export default function DeckScreen() {
 
   return (
     <SafeAreaView style={[styles.safe, { backgroundColor: deck.bgColor }]} edges={['top']}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -48,24 +48,21 @@ export default function DeckScreen() {
         {/* Back button */}
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Text style={styles.backArrow}>←</Text>
-          <Text style={styles.backText}>Back</Text>
         </TouchableOpacity>
 
         {/* Hero section */}
         <View style={styles.hero}>
           <Text style={styles.emoji}>{deck.emoji}</Text>
+          <Text style={[styles.deckLabel, { color: deck.accentColor }]}>
+            {deck.subtitle.toUpperCase()}
+          </Text>
           <Text style={styles.title}>{deck.title}</Text>
-          <Text style={[styles.subtitle, { color: deck.accentColor }]}>{deck.subtitle}</Text>
-          <View style={[styles.divider, { backgroundColor: deck.accentColor }]} />
           <Text style={styles.description}>{deck.description}</Text>
         </View>
 
         {/* Level picker */}
         <View style={styles.levelSection}>
-          <Text style={styles.sectionTitle}>Choose your level</Text>
-          <Text style={styles.sectionSub}>
-            Start where you feel comfortable and go deeper when ready.
-          </Text>
+          <Text style={styles.sectionTitle}>Choose a level</Text>
 
           <View style={styles.levels}>
             {deck.levels.map((lvl, index) => (
@@ -82,13 +79,6 @@ export default function DeckScreen() {
               />
             ))}
           </View>
-        </View>
-
-        {/* Bottom note */}
-        <View style={[styles.note, { borderColor: deck.accentColor + '30' }]}>
-          <Text style={styles.noteText}>
-            You can revisit this deck at any time and explore different levels.
-          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -108,20 +98,13 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.xxl,
   },
   backBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
     paddingVertical: Spacing.md,
+    alignSelf: 'flex-start',
   },
   backArrow: {
-    fontSize: 20,
+    fontSize: 22,
     color: Colors.text,
     fontFamily: Fonts.regular,
-  },
-  backText: {
-    fontFamily: Fonts.medium,
-    fontSize: 16,
-    color: Colors.text,
   },
   errorText: {
     fontFamily: Fonts.regular,
@@ -131,30 +114,25 @@ const styles = StyleSheet.create({
   },
   hero: {
     alignItems: 'center',
-    paddingVertical: Spacing.xl,
+    paddingBottom: Spacing.xl,
     gap: Spacing.sm,
   },
   emoji: {
-    fontSize: 52,
+    fontSize: 48,
     marginBottom: Spacing.xs,
   },
+  deckLabel: {
+    fontFamily: Fonts.semiBold,
+    fontSize: 11,
+    letterSpacing: 5,
+  },
   title: {
-    fontFamily: Fonts.bold,
-    fontSize: 36,
+    fontFamily: Fonts.boldItalic,
+    fontSize: 40,
     color: Colors.text,
     textAlign: 'center',
-    letterSpacing: 0.5,
-  },
-  subtitle: {
-    fontFamily: Fonts.mediumItalic,
-    fontSize: 16,
-    letterSpacing: 1,
-  },
-  divider: {
-    width: 50,
-    height: 2,
-    borderRadius: 1,
-    marginVertical: Spacing.sm,
+    letterSpacing: -0.3,
+    lineHeight: 44,
   },
   description: {
     fontFamily: Fonts.regular,
@@ -163,38 +141,20 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: Spacing.md,
+    marginTop: Spacing.xs,
   },
   levelSection: {
-    marginTop: Spacing.lg,
+    marginTop: Spacing.sm,
   },
   sectionTitle: {
-    fontFamily: Fonts.bold,
-    fontSize: 24,
-    color: Colors.text,
-    marginBottom: Spacing.xs,
-    letterSpacing: 0.3,
-  },
-  sectionSub: {
-    fontFamily: Fonts.italic,
-    fontSize: 14,
+    fontFamily: Fonts.semiBold,
+    fontSize: 13,
     color: Colors.textMuted,
-    marginBottom: Spacing.lg,
-    lineHeight: 20,
+    letterSpacing: 2,
+    textTransform: 'uppercase',
+    marginBottom: Spacing.md,
   },
   levels: {
     gap: 0,
-  },
-  note: {
-    borderWidth: 1,
-    borderRadius: Radius.md,
-    padding: Spacing.md,
-    marginTop: Spacing.lg,
-  },
-  noteText: {
-    fontFamily: Fonts.italic,
-    fontSize: 13,
-    color: Colors.textMuted,
-    textAlign: 'center',
-    lineHeight: 20,
   },
 });

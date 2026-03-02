@@ -45,4 +45,5 @@ export default function RootLayout() {
       }}
     />
   );
+  // Note: StatusBar style is set per-screen to 'dark' for light backgrounds
 }

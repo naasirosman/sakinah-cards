@@ -32,9 +32,9 @@ export const DECKS: Deck[] = [
     description:
       'Thoughtful questions for the blessed process of getting to know a potential spouse — with respect, intention & sincerity.',
     emoji: '🌿',
-    bgColor: '#1A0A0C',
-    cardColor: '#2A1215',
-    accentColor: '#8B1A2B',
+    bgColor: '#F4F8F2',
+    cardColor: '#FFFFFF',
+    accentColor: '#6B8C6A',
     levels: [
       {
         level: 'close',
@@ -150,9 +150,9 @@ export const DECKS: Deck[] = [
     description:
       'Questions to reignite conversations, deepen love and strengthen the sacred covenant between husband and wife.',
     emoji: '💛',
-    bgColor: '#1A0E04',
-    cardColor: '#2A1808',
-    accentColor: '#C9943C',
+    bgColor: '#FAF6EE',
+    cardColor: '#FFFFFF',
+    accentColor: '#A87D50',
     levels: [
       {
         level: 'close',
@@ -286,9 +286,9 @@ export const DECKS: Deck[] = [
     description:
       'Questions to explore your faith, spiritual goals and relationship with Allah — together as believers.',
     emoji: '☪️',
-    bgColor: '#080F12',
-    cardColor: '#0E1A20',
-    accentColor: '#2A6B8A',
+    bgColor: '#F2F6FA',
+    cardColor: '#FFFFFF',
+    accentColor: '#4A789A',
     levels: [
       {
         level: 'close',
