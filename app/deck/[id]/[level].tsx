@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import TopicCard from '../../../components/TopicCard';
 import { getDeck, Level } from '../../../constants/decks';
-import { Colors, Fonts, Radius, Spacing } from '../../../constants/theme';
+import { Colors, Fonts, Spacing } from '../../../constants/theme';
 
 const LEVEL_LABELS: Record<Level, string> = {
   close: 'Close',
@@ -61,18 +61,6 @@ export default function TopicScreen() {
           <Text style={styles.title}>{deck.title}</Text>
           <Text style={styles.description}>{deckLevel.description}</Text>
         </View>
-
-        {/* Open All Cards button */}
-        <TouchableOpacity
-          style={[styles.openAllBtn, { backgroundColor: deck.accentColor }]}
-          onPress={() => handleTopicPress('all')}
-          activeOpacity={0.85}
-        >
-          <Text style={styles.openAllText}>Open All Cards</Text>
-          <Text style={styles.openAllCount}>
-            {deckLevel.topics.reduce((sum, t) => sum + t.questions.length, 0)} questions
-          </Text>
-        </TouchableOpacity>
 
         {/* Topic list */}
         <View style={styles.topicSection}>
@@ -159,26 +147,6 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     paddingHorizontal: Spacing.md,
     marginTop: Spacing.xs,
-  },
-  openAllBtn: {
-    borderRadius: Radius.md,
-    paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.lg,
-    alignItems: 'center',
-    marginBottom: Spacing.lg,
-    gap: 4,
-  },
-  openAllText: {
-    fontFamily: Fonts.semiBold,
-    fontSize: 16,
-    color: Colors.white,
-    letterSpacing: 0.3,
-  },
-  openAllCount: {
-    fontFamily: Fonts.regular,
-    fontSize: 12,
-    color: Colors.white,
-    opacity: 0.8,
   },
   topicSection: {
     marginTop: Spacing.sm,

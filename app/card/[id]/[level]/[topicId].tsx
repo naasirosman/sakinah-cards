@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -97,11 +98,12 @@ export default function CardScreen() {
 
   async function handleShare() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const shareText = `${deck.emoji} "${currentQuestion.text}"\n\nsakinacards.app`;
     try {
       const uri = await captureRef(shareCardRef, { format: 'png', quality: 1 });
-      await Sharing.shareAsync(uri, { mimeType: 'image/png', dialogTitle: 'Share this card' });
+      await Share.share({ message: shareText, url: uri });
     } catch (_) {
-      await Sharing.shareAsync('', { dialogTitle: 'Share this card' });
+      await Share.share({ message: shareText });
     }
   }
 
