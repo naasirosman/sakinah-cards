@@ -4,17 +4,16 @@ on:
   push:
     branches:
       - '**'       # OTA update on every branch push
-    tags:
-      - 'v*'       # Full build + submit on version tags (e.g. v1.1.0)
     paths-ignore:
       - '.github/workflows/**'
+  workflow_dispatch:   # Manual trigger for Build & Submit to TestFlight
 
 jobs:
   # ── OTA update (JS-only, instant, no App Store review) ───────────────────
   update:
     name: OTA Update
     runs-on: ubuntu-latest
-    if: github.ref_type == 'branch'
+    if: github.event_name == 'push'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,11 +41,11 @@ jobs:
             --message "App update" \
             --non-interactive
 
-  # ── Full native build + TestFlight submit (triggered by version tag) ──────
+  # ── Full native build + TestFlight submit (triggered manually) ───────────
   build:
     name: Build & Submit to TestFlight
     runs-on: ubuntu-latest
-    if: github.ref_type == 'tag'
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
