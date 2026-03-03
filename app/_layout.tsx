@@ -13,7 +13,11 @@ import * as Updates from 'expo-updates';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { Platform } from 'react-native';
+import Purchases, { LOG_LEVEL } from 'react-native-purchases';
 import { Colors } from '../constants/theme';
+
+const RC_API_KEY_IOS = 'test_qgOoYRuoTvpMGeFPxICYckEpxfq';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -28,6 +32,13 @@ export default function RootLayout() {
     CormorantGaramond_700Bold,
     CormorantGaramond_700Bold_Italic,
   });
+
+  useEffect(() => {
+    Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.VERBOSE : LOG_LEVEL.WARN);
+    if (Platform.OS === 'ios') {
+      Purchases.configure({ apiKey: RC_API_KEY_IOS });
+    }
+  }, []);
 
   useEffect(() => {
     if (fontsLoaded) {

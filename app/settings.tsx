@@ -3,7 +3,6 @@ import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import {
-  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,28 +10,26 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import RevenueCatUI from 'react-native-purchases-ui';
 import { Colors, Fonts, Radius, Spacing } from '../constants/theme';
 import { usePurchase } from '../hooks/usePurchase';
 
 const APP_VERSION = '1.0.1';
-const RC_CUSTOMER_ID = 'rc_xxxxxxxxxxxxxxxx'; // placeholder
 
 function openLink(url: string) {
   Linking.openURL(url);
 }
 
 export default function SettingsScreen() {
-  const { isPurchased, restorePurchase } = usePurchase();
+  const { isPurchased, customerInfo } = usePurchase();
   const [restoring, setRestoring] = useState(false);
 
   async function handleRestore() {
     setRestoring(true);
-    const restored = await restorePurchase();
-    setRestoring(false);
-    if (restored) {
-      Alert.alert('Restored', 'Your purchase has been restored.');
-    } else {
-      Alert.alert('Nothing to restore', 'No previous purchase found for this account.');
+    try {
+      await RevenueCatUI.presentCustomerCenter();
+    } finally {
+      setRestoring(false);
     }
   }
 
@@ -103,7 +100,7 @@ export default function SettingsScreen() {
                 )
               }
             >
-              <Text style={styles.rowLabel}>Rate Sakina Cards ⭐</Text>
+              <Text style={styles.rowLabel}>Rate Sakina Cards</Text>
               <Text style={styles.chevron}>›</Text>
             </TouchableOpacity>
             <View style={styles.rowDivider} />
@@ -146,7 +143,7 @@ export default function SettingsScreen() {
             <View style={styles.rowDivider} />
             <View style={styles.infoRow}>
               <Text style={styles.rowLabel}>Customer ID</Text>
-              <Text style={styles.rowValue}>{RC_CUSTOMER_ID}</Text>
+              <Text style={styles.rowValue}>{customerInfo?.originalAppUserId ?? '—'}</Text>
             </View>
           </View>
         </View>

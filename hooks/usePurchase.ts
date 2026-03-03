@@ -1,35 +1,38 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect, useState } from 'react';
+import Purchases, { CustomerInfo } from 'react-native-purchases';
 import { Level } from '../constants/decks';
 
-const PURCHASE_KEY = '@sakina_purchased';
+const ENTITLEMENT_ID = 'Sakina Cards Pro';
 
 export function usePurchase() {
-  const [isPurchased, setIsPurchased] = useState(false);
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const isPurchased = !!customerInfo?.entitlements.active[ENTITLEMENT_ID];
+
   useEffect(() => {
-    AsyncStorage.getItem(PURCHASE_KEY)
-      .then((val) => {
-        if (val === 'true') setIsPurchased(true);
-      })
+    Purchases.getCustomerInfo()
+      .then(setCustomerInfo)
+      .catch(() => {})
       .finally(() => setIsLoading(false));
+
+    const listener = Purchases.addCustomerInfoUpdateListener((info) => {
+      setCustomerInfo(info);
+    });
+
+    return () => {
+      listener.remove();
+    };
   }, []);
 
-  const purchase = useCallback(async () => {
-    // TODO: integrate with RevenueCat / StoreKit / Google Play Billing
-    await AsyncStorage.setItem(PURCHASE_KEY, 'true');
-    setIsPurchased(true);
-  }, []);
-
-  const restorePurchase = useCallback(async () => {
-    // TODO: integrate with RevenueCat restore
-    const val = await AsyncStorage.getItem(PURCHASE_KEY);
-    if (val === 'true') {
-      setIsPurchased(true);
-      return true;
+  const restorePurchase = useCallback(async (): Promise<boolean> => {
+    try {
+      const info = await Purchases.restorePurchases();
+      setCustomerInfo(info);
+      return !!info.entitlements.active[ENTITLEMENT_ID];
+    } catch {
+      return false;
     }
-    return false;
   }, []);
 
   const isLevelLocked = useCallback(
@@ -40,5 +43,5 @@ export function usePurchase() {
     [isPurchased]
   );
 
-  return { isPurchased, isLoading, purchase, restorePurchase, isLevelLocked };
+  return { isPurchased, isLoading, customerInfo, restorePurchase, isLevelLocked };
 }
