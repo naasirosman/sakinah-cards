@@ -35,7 +35,9 @@ export default function CardScreen() {
   const shareCardRef = useRef<View>(null);
 
   const deck = getDeck(id);
-  const topic = getDeckLevelTopic(id, level, topicId);
+  const deckLevel = deck?.levels.find((l) => l.level === level);
+  const isAll = topicId === 'all';
+  const topic = isAll ? null : getDeckLevelTopic(id, level, topicId);
   const { addFavourite, removeFavourite, isFavourite } = useFavourites();
   const { isLevelLocked, isLoading } = usePurchase();
 
@@ -45,7 +47,7 @@ export default function CardScreen() {
     }
   }, [isLoading, level]);
 
-  if (!deck || !topic) {
+  if (!deck || (!topic && !isAll) || (isAll && !deckLevel)) {
     return (
       <SafeAreaView style={styles.safe}>
         <Text style={styles.errorText}>Not found</Text>
@@ -53,7 +55,10 @@ export default function CardScreen() {
     );
   }
 
-  const questions = topic.questions;
+  const questions = isAll
+    ? deckLevel!.topics.flatMap((t) => t.questions)
+    : topic!.questions;
+  const headerTitle = isAll ? 'All Topics' : topic!.name;
   const currentQuestion = questions[currentIndex];
   const favId = currentQuestion.id;
   const saved = isFavourite(favId);
@@ -83,8 +88,8 @@ export default function CardScreen() {
         deckTitle: deck.title,
         deckEmoji: deck.emoji,
         level: LEVEL_LABELS[level],
-        topicId: topic.id,
-        topicName: topic.name,
+        topicId: topicId,
+        topicName: headerTitle,
         question: currentQuestion.text,
       });
     }
@@ -114,7 +119,7 @@ export default function CardScreen() {
           <Text style={[styles.deckLabel, { color: deck.accentColor }]}>
             {LEVEL_LABELS[level].toUpperCase()}
           </Text>
-          <Text style={styles.headerTitle}>{topic.name}</Text>
+          <Text style={styles.headerTitle}>{headerTitle}</Text>
         </View>
 
         <TouchableOpacity style={styles.iconBtn} onPress={handleShare}>

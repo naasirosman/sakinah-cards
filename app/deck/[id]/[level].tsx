@@ -78,6 +78,13 @@ export default function TopicScreen() {
         <View style={styles.topicSection}>
           <Text style={styles.sectionTitle}>Choose a topic</Text>
           <View style={styles.topics}>
+            <TopicCard
+              name="All Topics"
+              emoji="✦"
+              questionCount={deckLevel.topics.reduce((sum, t) => sum + t.questions.length, 0)}
+              accentColor={deck.accentColor}
+              onPress={() => handleTopicPress('all')}
+            />
             {deckLevel.topics.map((topic) => (
               <TopicCard
                 key={topic.id}
