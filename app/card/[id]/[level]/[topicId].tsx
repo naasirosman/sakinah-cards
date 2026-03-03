@@ -98,7 +98,7 @@ export default function CardScreen() {
 
   async function handleShare() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    const shareText = `${deck.emoji} "${currentQuestion.text}"\n\nsakinacards.app`;
+    const shareText = `${deck.emoji} "${currentQuestion.text}"\n\nDownload Sakina Cards 👇\nhttps://apps.apple.com/app/id6759875947`;
     try {
       const uri = await captureRef(shareCardRef, { format: 'png', quality: 1 });
       await Share.share({ message: shareText, url: uri });
