@@ -505,7 +505,7 @@ export const DECKS: Deck[] = [
     subtitle: 'The People Who Made You',
     description:
       'Questions to explore your relationships, upbringing and the people who shaped who you are.',
-    emoji: '🫂',
+    emoji: '🍂',
     bgColor: '#FDF6F0',
     cardColor: '#FFFFFF',
     accentColor: '#C47B4A',
