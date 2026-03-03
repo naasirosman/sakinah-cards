@@ -14,7 +14,7 @@ import RevenueCatUI from 'react-native-purchases-ui';
 import { Colors, Fonts, Radius, Spacing } from '../constants/theme';
 import { usePurchase } from '../hooks/usePurchase';
 
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.2';
 
 function openLink(url: string) {
   Linking.openURL(url);

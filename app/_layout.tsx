@@ -17,7 +17,12 @@ import { Platform } from 'react-native';
 import Purchases, { LOG_LEVEL } from 'react-native-purchases';
 import { Colors } from '../constants/theme';
 
-const RC_API_KEY_IOS = 'test_qgOoYRuoTvpMGeFPxICYckEpxfq';
+// Configure RevenueCat at module load — must happen before any component
+// mounts, because React runs child useEffects before parent useEffects.
+Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.VERBOSE : LOG_LEVEL.WARN);
+if (Platform.OS === 'ios') {
+  Purchases.configure({ apiKey: 'test_qgOoYRuoTvpMGeFPxICYckEpxfq' });
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -32,13 +37,6 @@ export default function RootLayout() {
     CormorantGaramond_700Bold,
     CormorantGaramond_700Bold_Italic,
   });
-
-  useEffect(() => {
-    Purchases.setLogLevel(__DEV__ ? LOG_LEVEL.VERBOSE : LOG_LEVEL.WARN);
-    if (Platform.OS === 'ios') {
-      Purchases.configure({ apiKey: RC_API_KEY_IOS });
-    }
-  }, []);
 
   useEffect(() => {
     if (fontsLoaded) {
