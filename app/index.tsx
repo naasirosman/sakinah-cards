@@ -25,10 +25,16 @@ export default function HomeScreen() {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity
-            style={styles.heartBtn}
+            style={styles.iconBtn}
             onPress={() => router.push('/favourites')}
           >
             <Text style={styles.heartIcon}>♡</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.iconBtn}
+            onPress={() => router.push('/settings')}
+          >
+            <Text style={styles.settingsIcon}>⚙</Text>
           </TouchableOpacity>
         </View>
 
@@ -77,7 +83,7 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.md,
     paddingBottom: Spacing.sm,
   },
-  heartBtn: {
+  iconBtn: {
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -86,6 +92,10 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     fontSize: 22,
+    color: Colors.textMuted,
+  },
+  settingsIcon: {
+    fontSize: 20,
     color: Colors.textMuted,
   },
   titleSection: {
