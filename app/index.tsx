@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
@@ -34,7 +35,7 @@ export default function HomeScreen() {
             style={styles.iconBtn}
             onPress={() => router.push('/settings')}
           >
-            <Text style={styles.settingsIcon}>⚙</Text>
+            <Ionicons name="settings-outline" size={22} color={Colors.textMuted} />
           </TouchableOpacity>
         </View>
 
@@ -92,10 +93,6 @@ const styles = StyleSheet.create({
   },
   heartIcon: {
     fontSize: 22,
-    color: Colors.textMuted,
-  },
-  settingsIcon: {
-    fontSize: 20,
     color: Colors.textMuted,
   },
   titleSection: {
